@@ -1,4 +1,4 @@
-package com.tdp2.tp0.weweather;
+package com.tdp2.tp0.weweather.model;
 
 public enum ClimateState
 {

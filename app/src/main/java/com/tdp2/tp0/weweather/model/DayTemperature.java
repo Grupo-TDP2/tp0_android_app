@@ -1,7 +1,5 @@
 package com.tdp2.tp0.weweather.model;
 
-import com.tdp2.tp0.weweather.ClimateState;
-
 import java.util.Date;
 
 public class DayTemperature

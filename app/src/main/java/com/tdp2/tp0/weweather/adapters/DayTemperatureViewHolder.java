@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.tdp2.tp0.weweather.ClimateState;
+import com.tdp2.tp0.weweather.model.ClimateState;
 import com.tdp2.tp0.weweather.R;
 import com.tdp2.tp0.weweather.utils.StringUtils;
 
