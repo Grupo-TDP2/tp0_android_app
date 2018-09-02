@@ -5,4 +5,5 @@
     <string name="temperature_unit">℃</string>
     <string name="select_city">Seleccionar ciudad</string>
     <string name="not_enough_letters">Se necesitan al menos 3 caraceters</string>
+    <string name="no_connectivity_refresh">No fue posible conectarse al servidor, por favor intente más tarde</string>
 </resources>

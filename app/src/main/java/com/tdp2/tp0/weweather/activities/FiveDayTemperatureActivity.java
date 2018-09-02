@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.tdp2.tp0.weweather.ClimateState;
 import com.tdp2.tp0.weweather.R;
@@ -55,7 +56,7 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //TODO set toolbar city name
-        
+
         actionButton= findViewById(R.id.fab);
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,8 +73,6 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
                 }
             }
         });
-
-        //displayRefresh(temperatureVisible); TODO set properly
 
         ListView listView = findViewById(R.id.temperature_list_view);
         adapter = new DayListAdapter(this, R.layout.temperature_list_item, getDateList());
@@ -132,12 +131,6 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
         finish();
     }
 
-    private void displayRefresh(boolean display)
-    {
-        int visibility = display ? View.VISIBLE : View.GONE;
-        actionButton.setVisibility(visibility);
-    }
-
     private List<DayTemperatureViewModel> getDateList()
     {
         List<DayTemperatureViewModel> list = new ArrayList<>();
@@ -175,8 +168,8 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
                 adapter.notifyDataSetChanged();
             }
         } else
-            {
-            setNoConnectivityMode();
+        {
+            Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_SHORT).show();
         }
     }
 }
