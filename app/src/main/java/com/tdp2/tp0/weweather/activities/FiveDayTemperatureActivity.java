@@ -43,6 +43,7 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
     private static DisplayState displayState = DisplayState.NO_CONNECTIVITY;
     private static boolean temperatureVisible = false;
     private DayListAdapter adapter;
+    private List<DayTemperatureViewModel> temperatures;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -53,7 +54,8 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //TODO set toolbar city name
+        
         actionButton= findViewById(R.id.fab);
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,12 +70,10 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
                 } else {
                     setNoConnectivityMode();
                 }
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //       .setAction("Action", null).show();
             }
         });
 
-        //displayRefresh(temperatureVisible);
+        //displayRefresh(temperatureVisible); TODO set properly
 
         ListView listView = findViewById(R.id.temperature_list_view);
         adapter = new DayListAdapter(this, R.layout.temperature_list_item, getDateList());
@@ -97,9 +97,6 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch(id)
         {
@@ -145,7 +142,7 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
     {
         List<DayTemperatureViewModel> list = new ArrayList<>();
         Date date = new Date();
-        //TODO get from model with country selected!!!
+        //TODO GET FROM MODEL WITH COUNTRY SELECTED!!!
         for( int i = 0; i < 5; i++)
         {
             list.add(new DayTemperatureViewModel(date, 25,25, ClimateState.CLEAR_DAY, ClimateState.CLEAR_NIGHT ));
@@ -154,6 +151,32 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
             c.add(Calendar.DATE, 1);
             date = c.getTime();
         }
+        temperatures = list;
         return list;
+    }
+
+    /** To be called after actualize is done */
+    private void onRefreshedDateList(boolean hasConnectivity,
+                                     boolean isDay,
+                                     List<DayTemperatureViewModel> dateList)
+    {
+        if( hasConnectivity )
+        {
+            if( isDay && displayState != DisplayState.DAY_MODE )
+            {
+                setDayMode();
+            } else if( !isDay && displayState != DisplayState.NIGHT_MODE )
+            {
+                setNightMode();
+            } else
+            {
+                temperatures.clear();
+                temperatures.addAll(dateList);
+                adapter.notifyDataSetChanged();
+            }
+        } else
+            {
+            setNoConnectivityMode();
+        }
     }
 }

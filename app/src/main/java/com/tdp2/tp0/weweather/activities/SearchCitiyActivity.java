@@ -50,7 +50,9 @@ public class SearchCitiyActivity extends AppCompatActivity
         });
 
         cityList = new ArrayList<>();
-        cityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1 ,cityList);
+        cityAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1
+                ,cityList);
         ListView listView = findViewById(R.id.cities_list);
         listView.setAdapter(cityAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -61,7 +63,7 @@ public class SearchCitiyActivity extends AppCompatActivity
                 if( position <= cityList.size() )
                 {
                     String selected = cityList.get(position);
-                    //TODO set city selected..
+                    //TODO set city selected, load temperatures.. and go back..
                 }
             }
         });
@@ -73,7 +75,7 @@ public class SearchCitiyActivity extends AppCompatActivity
     public void onCitiesLoaded(List<String> cities)
     {
         cityList.clear();
-        cities.addAll(cities);
+        cityList.addAll(cities);
         cityAdapter.notifyDataSetChanged();
     }
 }
