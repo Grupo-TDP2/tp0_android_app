@@ -1,6 +1,10 @@
 package com.tdp2.tp0.weweather.model;
 
+import com.tdp2.tp0.weweather.ClimateState;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class AppModel
@@ -16,13 +20,31 @@ public class AppModel
         return instance;
     }
 
+    private boolean hasConnectivity = false;
     private String citySelected = null;
-    private List<DayTemperature> temperatures = new ArrayList();
+    private List<DayTemperature> temperatures = new ArrayList<>();
     private boolean isDayInCity = false;
 
-    public void setCity(String name, List<DayTemperature> temperatures, boolean isDayInCity )
+    private AppModel()
+    {
+        Date date = new Date();
+        for( int i = 0; i < 5; i++)
+        {
+           temperatures.add(new DayTemperature(date, 25,25, ClimateState.CLEAR_DAY, ClimateState.CLEAR_NIGHT ));
+           Calendar c = Calendar.getInstance();
+           c.setTime(date);
+           c.add(Calendar.DATE, 1);
+           date = c.getTime();
+       }
+    }
+
+    public void setCity(String name)
     {
         this.citySelected = name;
+    }
+
+    public void setCityData(List<DayTemperature> temperatures, boolean isDayInCity )
+    {
         this.temperatures = temperatures;
         this.isDayInCity = isDayInCity;
     }
@@ -46,5 +68,14 @@ public class AppModel
     {
         return isDayInCity;
     }
+
+    public boolean hasConnectivity() {
+        return hasConnectivity;
+    }
+
+    public void setHasConnectivity(boolean hasConnectivity) {
+        this.hasConnectivity = hasConnectivity;
+    }
+
 
 }

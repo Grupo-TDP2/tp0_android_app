@@ -38,6 +38,9 @@
         <item name="backgroundTemperature">@color/colorWhite</item>
     </style>
 
+    <style name="AppTheme.LaunchScreen">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+    </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
