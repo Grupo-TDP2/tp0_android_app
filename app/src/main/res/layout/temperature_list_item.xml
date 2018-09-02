@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="TextView"
+            android:textColor="?attr/colorText"
             android:textSize="24sp" />
 
         <LinearLayout
@@ -39,6 +40,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_weight="1"
                 android:text="30"
+                android:textColor="?attr/colorText"
                 android:textSize="18sp" />
 
             <TextView
@@ -47,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/temperature_unit"
+                android:textColor="?attr/colorText"
                 android:textSize="18sp" />
 
             <ImageView
@@ -64,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="25"
+                android:textColor="?attr/colorText"
                 android:textSize="18sp" />
 
             <TextView
@@ -72,6 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/temperature_unit"
+                android:textColor="?attr/colorText"
                 android:textSize="18sp" />
 
             <ImageView
