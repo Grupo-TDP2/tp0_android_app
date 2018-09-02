@@ -20,6 +20,7 @@ public class AppModel
 
     private boolean hasConnectivity = false;
     private String citySelected = null;
+    private String countryCode = null;
     private List<DayTemperature> temperatures = new ArrayList<>();
     private boolean isDayInCity = false;
 
@@ -36,8 +37,9 @@ public class AppModel
        }
     }
 
-    public void setCity(String name)
+    public void setCity(String countryCode, String name)
     {
+        this.countryCode = countryCode;
         this.citySelected = name;
     }
 
@@ -60,6 +62,10 @@ public class AppModel
     public List<DayTemperature> getTemperatures()
     {
         return temperatures;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
     }
 
     public boolean isDayInCity()

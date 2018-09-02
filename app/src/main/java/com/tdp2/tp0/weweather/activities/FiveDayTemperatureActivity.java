@@ -47,7 +47,9 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle(AppModel.getInstance().getCitySelected());
+        String cityName = AppModel.getInstance().getCitySelected();
+        String countryCode = AppModel.getInstance().getCountryCode();
+        getSupportActionBar().setTitle(getString(R.string.city_name, cityName, countryCode));
 
         FloatingActionButton actionButton = findViewById(R.id.fab);
         actionButton.setOnClickListener(new View.OnClickListener() {

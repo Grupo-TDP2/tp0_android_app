@@ -64,8 +64,10 @@ public class SearchCitiyActivity extends AppCompatActivity
             {
                 if( position <= cityList.size() )
                 {
+                    //TODO GET CountryCode and CityName
                     String selected = cityList.get(position);
-                    AppModel.getInstance().setCity(selected);
+                    String cc = cityList.get(position);
+                    //AppModel.getInstance().setCity(cc, selected);
                     //TODO set city selected, load temperatures.. and go back..
                 }
             }

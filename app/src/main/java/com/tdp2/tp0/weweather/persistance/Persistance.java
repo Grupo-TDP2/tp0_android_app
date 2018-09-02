@@ -8,20 +8,24 @@ import com.tdp2.tp0.weweather.model.AppModel;
 public class Persistance
 {
     private String sharedPrefencesName =  "com.tdp2.tp0.weweather.SHARED_PREFERENCES";
-    private String NAME_KEY = "com.tdp2.tp0.weweather.NAME_KEY";
+    private String CITY_KEY = "com.tdp2.tp0.weweather.CITY_KEY";
+    private String COUNTRY_KEY = "com.tdp2.tp0.weweather.COUNTRY_KEY";
 
     public void loadInto(Context context, AppModel model)
     {
         SharedPreferences preferences = context
                 .getSharedPreferences(sharedPrefencesName, Context.MODE_PRIVATE);
-        String selected = preferences.getString(NAME_KEY, null);
-        model.setCity(selected);
+        String city = preferences.getString(CITY_KEY, null);
+        String selected = preferences.getString(COUNTRY_KEY, null);
+        model.setCity(city, selected);
     }
 
     public void saveFrom(Context context, AppModel model)
     {
         SharedPreferences preferences = context
                 .getSharedPreferences(sharedPrefencesName, Context.MODE_PRIVATE);
-        preferences.edit().putString(NAME_KEY, model.getCitySelected()).apply();
+        preferences.edit()
+                .putString(CITY_KEY, model.getCitySelected())
+                .putString(COUNTRY_KEY, model.getCountryCode()).apply();
     }
 }

@@ -24,7 +24,7 @@ public class SplashActivity extends AppCompatActivity
         if( !AppModel.getInstance().hasCity() )
         {
             //TODO check name
-            AppModel.getInstance().setCity("Buenos Aires");
+            AppModel.getInstance().setCity("AR", "Buenos Aires");
         }
         //TODO search city
         //TODO remove
