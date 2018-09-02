@@ -89,11 +89,6 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_pantalla_de_inicio, menu);
-        if (!temperatureVisible)
-        {
-            for (int i = 0; i < menu.size(); i++)
-                menu.getItem(i).setVisible(false);
-        }
         return true;
     }
 

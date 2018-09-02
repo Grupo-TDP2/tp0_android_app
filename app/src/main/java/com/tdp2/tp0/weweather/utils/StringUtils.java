@@ -8,8 +8,8 @@ public class StringUtils
      * @param target The string to modify
      * @return The string with the first letter uppercased
      */
-    public static String asUpperCaseFirstChar(final String target) {
-
+    public static String asUpperCaseFirstChar(final String target)
+    {
         if ((target == null) || (target.length() == 0)) {
             return target; // You could omit this check and simply live with an
             // exception if you like
