@@ -10,6 +10,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.tdp2.tp0.weweather.R;
+import com.tdp2.tp0.weweather.model.AppModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ public class SearchCitiyActivity extends AppCompatActivity
                 if( query.length() >= 3 )
                 {
                     //TODO make request for cities
+                    //onCitiesLoaded();
                     searchView.clearFocus();
                     return true;
                 }
@@ -63,19 +65,24 @@ public class SearchCitiyActivity extends AppCompatActivity
                 if( position <= cityList.size() )
                 {
                     String selected = cityList.get(position);
+                    AppModel.getInstance().setCity(selected);
                     //TODO set city selected, load temperatures.. and go back..
                 }
             }
         });
-
-        //onCitiesLoaded();
     }
 
 
-    public void onCitiesLoaded(List<String> cities)
+    public void onCitiesLoaded(boolean success, List<String> cities)
     {
-        cityList.clear();
-        cityList.addAll(cities);
-        cityAdapter.notifyDataSetChanged();
+        if( success )
+        {
+            cityList.clear();
+            cityList.addAll(cities);
+            cityAdapter.notifyDataSetChanged();
+        } else
+        {
+            Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_SHORT).show();
+        }
     }
 }

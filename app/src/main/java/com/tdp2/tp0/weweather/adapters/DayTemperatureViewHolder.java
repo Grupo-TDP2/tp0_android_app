@@ -23,7 +23,7 @@ class DayTemperatureViewHolder
     private ImageView nightIcon;
     private View temperatureBlock;
 
-    public DayTemperatureViewHolder(View view)
+    DayTemperatureViewHolder(View view)
     {
         dayName = view.findViewById(R.id.day_name);
         temperatureBlock = view.findViewById(R.id.temperature_container);
@@ -63,8 +63,7 @@ class DayTemperatureViewHolder
             dayName.setText(R.string.tomorrow);
         } else
         {
-            DateFormat df = new DateFormat();
-            String formated = df.format("EEEE, dd/MM",day).toString();
+            String formated = DateFormat.format("EEEE, dd/MM",day).toString();
             dayName.setText(StringUtils.asUpperCaseFirstChar(formated));
         }
     }

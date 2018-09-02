@@ -30,9 +30,10 @@ public class DayListAdapter extends ArrayAdapter<DayTemperature>
         }
     }
 
+    @NonNull
     public View getView (int position,
                          View convertView,
-                         ViewGroup parent)
+                         @NonNull ViewGroup parent)
     {
         if( convertView == null )
         {
@@ -42,6 +43,7 @@ public class DayListAdapter extends ArrayAdapter<DayTemperature>
         }
 
         DayTemperature model = getItem(position);
+        if( model == null ) return convertView;
         DayTemperatureViewHolder viewHolder = (DayTemperatureViewHolder)convertView.getTag();
         viewHolder.setDayName(position, model.getDate());
         viewHolder.setDayIcon(getContext(), model.getDayIcon());
