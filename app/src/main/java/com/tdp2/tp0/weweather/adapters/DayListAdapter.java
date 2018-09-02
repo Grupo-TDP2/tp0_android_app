@@ -14,7 +14,7 @@ import java.util.List;
 public class DayListAdapter extends ArrayAdapter<DayTemperatureViewModel>
 {
     private int resource;
-    private boolean showTemperatures = true;
+    private boolean showTemperatures = false;
 
     public DayListAdapter(@NonNull Context context, int resource, @NonNull List<DayTemperatureViewModel> objects) {
         super(context, resource, objects);

@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,9 +29,9 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
 {
     enum DisplayState
     {
-        NO_CONNECTIVITY(R.style.AppTheme_NoConnectivity),
-        NIGHT_MODE(R.style.AppTheme_NightMode),
-        DAY_MODE(R.style.AppTheme_DayMode);
+        NO_CONNECTIVITY(R.style.AppTheme_NoActionBar_NoConnectivity),
+        NIGHT_MODE(R.style.AppTheme_NoActionBar_NightMode),
+        DAY_MODE(R.style.AppTheme_NoActionBar_DayMode);
         int theme;
         DisplayState(int theme)
         {
@@ -39,16 +40,17 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
     }
 
     private FloatingActionButton actionButton;
-    private DisplayState displayState = DisplayState.NO_CONNECTIVITY;
+    private static DisplayState displayState = DisplayState.NO_CONNECTIVITY;
+    private static boolean temperatureVisible = false;
     private DayListAdapter adapter;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        setTheme(displayState.theme);
         super.onCreate(savedInstanceState);
-        //setTheme(displayState.theme);
         setContentView(R.layout.activity_pantalla_de_inicio);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -57,13 +59,25 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 //TODO make actualization of temperatures
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if(displayState == DisplayState.NO_CONNECTIVITY)
+                {
+                    setNightMode();
+                } else if( displayState == DisplayState.NIGHT_MODE )
+                {
+                    setDayMode();
+                } else {
+                    setNoConnectivityMode();
+                }
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //       .setAction("Action", null).show();
             }
         });
 
+        //displayRefresh(temperatureVisible);
+
         ListView listView = findViewById(R.id.temperature_list_view);
         adapter = new DayListAdapter(this, R.layout.temperature_list_item, getDateList());
+        adapter.changeDisplayTemperature(temperatureVisible);
         listView.setAdapter(adapter);
     }
 
@@ -71,8 +85,15 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_pantalla_de_inicio, menu);
+        if (!temperatureVisible)
+        {
+            for (int i = 0; i < menu.size(); i++)
+                menu.getItem(i).setVisible(false);
+        }
         return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -108,9 +129,10 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
     private void changeDisplayMode(DisplayState state, boolean displayTemperatures)
     {
         displayState = state;
-        displayRefresh(displayTemperatures);
-        adapter.changeDisplayTemperature(displayTemperatures);
-        recreate();
+        temperatureVisible = displayTemperatures;
+        Intent intent = new Intent(this, FiveDayTemperatureActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void displayRefresh(boolean display)

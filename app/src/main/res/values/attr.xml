@@ -2,4 +2,5 @@
 <resources>
     <attr name="colorText" format="reference" />
     <attr name="backgroundRefresh" format="reference" />
+    <attr name="backgroundTemperature" format="reference"/>
 </resources>

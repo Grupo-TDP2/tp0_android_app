@@ -34,6 +34,7 @@ public class SearchCitiyActivity extends AppCompatActivity
                 if( query.length() >= 3 )
                 {
                     //TODO make request for cities
+                    searchView.clearFocus();
                     return true;
                 }
                 Toast.makeText(SearchCitiyActivity.this,

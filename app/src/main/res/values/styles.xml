@@ -1,39 +1,49 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorDarkGrey</item>
         <item name="colorPrimaryDark">@color/colorBlack</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorText">@color/colorDarkGrey</item>
-        <item name="backgroundRefresh">@color/colorBlack</item>
-        <item name="android:icon">@drawable/ic_refresh_white</item>
-        <item name="icon">@drawable/ic_refresh_white</item>
     </style>
 
-    <style name="AppTheme.DayMode" >
+    <style name="AppTheme.NoActionBar.DayMode" >
         <!-- Customize your theme here. -->
+        <item name="backgroundTemperature">@drawable/day_background</item>
     </style>
 
-    <style name="AppTheme.NightMode" >
+    <style name="AppTheme.NoActionBar.NightMode" >
         <!-- Customize your theme here. -->
         <item name="colorText">@color/colorWhite</item>
         <item name="backgroundRefresh">@color/colorWhite</item>
         <item name="android:icon">@drawable/ic_refresh</item>
         <item name="icon">@drawable/ic_refresh</item>
+        <item name="backgroundTemperature">@drawable/night_background</item>
     </style>
 
-    <style name="AppTheme.NoConnectivity" >
+    <style name="AppTheme.NoActionBar.NoConnectivity" >
         <!-- Customize your theme here. -->
+        <item name="backgroundTemperature">@color/colorWhite</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorText">@color/colorDarkGrey</item>
+        <item name="backgroundRefresh">@color/colorBlack</item>
+        <item name="android:icon">@drawable/ic_refresh_white</item>
+        <item name="icon">@drawable/ic_refresh_white</item>
+        <item name="backgroundTemperature">@color/colorWhite</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="WindowAnimationTransition">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
 </resources>
