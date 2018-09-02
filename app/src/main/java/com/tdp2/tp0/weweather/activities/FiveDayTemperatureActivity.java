@@ -1,4 +1,4 @@
-package com.tdp2.tp0.weweather;
+package com.tdp2.tp0.weweather.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,17 +8,31 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import com.tdp2.tp0.weweather.ClimateState;
+import com.tdp2.tp0.weweather.R;
+import com.tdp2.tp0.weweather.adapters.DayListAdapter;
+import com.tdp2.tp0.weweather.viewModel.DayTemperatureViewModel;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class FiveDayTemperatureActivity extends AppCompatActivity {
 
+    private DayListAdapter adapter;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantalla_de_inicio);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -26,6 +40,10 @@ public class FiveDayTemperatureActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        ListView listView = findViewById(R.id.temperature_list_view);
+        adapter = new DayListAdapter(this, R.layout.temperature_list_item, getDateList());
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -43,5 +61,21 @@ public class FiveDayTemperatureActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private List<DayTemperatureViewModel> getDateList()
+    {
+        List<DayTemperatureViewModel> list = new ArrayList<>();
+        Date date = new Date();
+        //TODO get from model with country selected!!!
+        for( int i = 0; i < 5; i++)
+        {
+            list.add(new DayTemperatureViewModel(date, 25,25, ClimateState.CLEAR_DAY, ClimateState.CLEAR_NIGHT ));
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.DATE, 1);
+            date = c.getTime();
+        }
+        return list;
     }
 }
