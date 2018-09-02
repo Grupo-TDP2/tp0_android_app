@@ -7,16 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import com.tdp2.tp0.weweather.viewModel.DayTemperatureViewModel;
+import com.tdp2.tp0.weweather.model.DayTemperature;
 
 import java.util.List;
 
-public class DayListAdapter extends ArrayAdapter<DayTemperatureViewModel>
+public class DayListAdapter extends ArrayAdapter<DayTemperature>
 {
     private int resource;
     private boolean showTemperatures = false;
 
-    public DayListAdapter(@NonNull Context context, int resource, @NonNull List<DayTemperatureViewModel> objects) {
+    public DayListAdapter(@NonNull Context context, int resource, @NonNull List<DayTemperature> objects) {
         super(context, resource, objects);
         this.resource = resource;
     }
@@ -41,7 +41,7 @@ public class DayListAdapter extends ArrayAdapter<DayTemperatureViewModel>
             convertView.setTag(viewHolder);
         }
 
-        DayTemperatureViewModel model = getItem(position);
+        DayTemperature model = getItem(position);
         DayTemperatureViewHolder viewHolder = (DayTemperatureViewHolder)convertView.getTag();
         viewHolder.setDayName(position, model.getDate());
         viewHolder.setDayIcon(getContext(), model.getDayIcon());

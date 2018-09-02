@@ -1,10 +1,10 @@
-package com.tdp2.tp0.weweather.viewModel;
+package com.tdp2.tp0.weweather.model;
 
 import com.tdp2.tp0.weweather.ClimateState;
 
 import java.util.Date;
 
-public class DayTemperatureViewModel
+public class DayTemperature
 {
     private Date date;
     private int dayTemperature;
@@ -12,7 +12,7 @@ public class DayTemperatureViewModel
     private ClimateState dayIcon;
     private ClimateState nightIcon;
 
-    public DayTemperatureViewModel(
+    public DayTemperature(
             Date date,
             int dayTemperature, int nightTemperature,
             ClimateState dayIcon, ClimateState nightIcon) {

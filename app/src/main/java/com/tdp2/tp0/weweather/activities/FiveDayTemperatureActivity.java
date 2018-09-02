@@ -1,14 +1,10 @@
 package com.tdp2.tp0.weweather.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,9 +14,8 @@ import android.widget.Toast;
 import com.tdp2.tp0.weweather.ClimateState;
 import com.tdp2.tp0.weweather.R;
 import com.tdp2.tp0.weweather.adapters.DayListAdapter;
-import com.tdp2.tp0.weweather.viewModel.DayTemperatureViewModel;
+import com.tdp2.tp0.weweather.model.DayTemperature;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,7 +39,7 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
     private static DisplayState displayState = DisplayState.NO_CONNECTIVITY;
     private static boolean temperatureVisible = false;
     private DayListAdapter adapter;
-    private List<DayTemperatureViewModel> temperatures;
+    private List<DayTemperature> temperatures;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -131,14 +126,14 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
         finish();
     }
 
-    private List<DayTemperatureViewModel> getDateList()
+    private List<DayTemperature> getDateList()
     {
-        List<DayTemperatureViewModel> list = new ArrayList<>();
+        List<DayTemperature> list = new ArrayList<>();
         Date date = new Date();
         //TODO GET FROM MODEL WITH COUNTRY SELECTED!!!
         for( int i = 0; i < 5; i++)
         {
-            list.add(new DayTemperatureViewModel(date, 25,25, ClimateState.CLEAR_DAY, ClimateState.CLEAR_NIGHT ));
+            list.add(new DayTemperature(date, 25,25, ClimateState.CLEAR_DAY, ClimateState.CLEAR_NIGHT ));
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             c.add(Calendar.DATE, 1);
@@ -151,7 +146,7 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
     /** To be called after actualize is done */
     private void onRefreshedDateList(boolean hasConnectivity,
                                      boolean isDay,
-                                     List<DayTemperatureViewModel> dateList)
+                                     List<DayTemperature> dateList)
     {
         if( hasConnectivity )
         {
