@@ -16,10 +16,12 @@ import com.tdp2.tp0.weweather.adapters.DayListAdapter;
 import com.tdp2.tp0.weweather.model.AppModel;
 import com.tdp2.tp0.weweather.model.City;
 import com.tdp2.tp0.weweather.model.DayTemperature;
+import com.tdp2.tp0.weweather.tasks.GetForecastTask;
 
 import java.util.List;
 
 public class FiveDayTemperatureActivity extends AppCompatActivity
+    implements GetForecastTask.Listener
 {
     enum DisplayState
     {
@@ -56,9 +58,8 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
         actionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO make actualization of temperatures
-                onRefreshedDateList(false, false,
-                        AppModel.getInstance().getTemperatures());
+                new GetForecastTask(FiveDayTemperatureActivity.this)
+                        .execute(AppModel.getInstance().getCitySelected().getId());
             }
         });
 
@@ -83,6 +84,7 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
         } else if( lastCity.getId() != AppModel.getInstance().getCitySelected().getId() )
         {
             setCityName();
+            setTemperature(AppModel.getInstance().getTemperatures());
         }
 
         if( displayState == DisplayState.NO_CONNECTIVITY )
@@ -139,7 +141,7 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
     }
 
     /** To be called after actualize is done */
-    private void onRefreshedDateList(boolean hasConnectivity,
+    public void onForecastGotten(boolean hasConnectivity,
                                      boolean isDay,
                                      List<DayTemperature> dateList)
     {
@@ -153,14 +155,25 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
                 restartActivity();
             } else
             {
-                temperatures.clear();
-                temperatures.addAll(dateList);
-                adapter.notifyDataSetChanged();
+                setTemperature(dateList);
             }
         } else
         {
             Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public View getView()
+    {
+        return findViewById(R.id.activity_temperature_days);
+    }
+
+    private void setTemperature(List<DayTemperature> temperature)
+    {
+        temperatures.clear();
+        temperatures.addAll(temperature);
+        adapter.notifyDataSetChanged();
     }
 
     private void restartActivity()

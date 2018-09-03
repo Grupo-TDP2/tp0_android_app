@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/backgroundTemperature"
+    android:id="@+id/activity_temperature_days"
     tools:context=".activities.FiveDayTemperatureActivity">
 
     <android.support.design.widget.AppBarLayout

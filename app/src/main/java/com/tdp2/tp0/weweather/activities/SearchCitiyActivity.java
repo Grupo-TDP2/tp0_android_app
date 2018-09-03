@@ -23,6 +23,7 @@ import com.tdp2.tp0.weweather.persistance.Persistance;
 import com.tdp2.tp0.weweather.model.responses.ServiceResponse;
 import com.tdp2.tp0.weweather.services.CitySearchService;
 import com.tdp2.tp0.weweather.services.WeatherService;
+import com.tdp2.tp0.weweather.tasks.GetForecastTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +31,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SearchCitiyActivity extends AppCompatActivity
+    implements GetForecastTask.Listener
 {
     private SearchView searchView;
     private ArrayAdapter<String> cityAdapter;
@@ -90,8 +92,7 @@ public class SearchCitiyActivity extends AppCompatActivity
     {
         AppModel.getInstance().setCity(city);
         persistance.saveFrom(this, AppModel.getInstance());
-        //TODO DO CORRECT CALL - CHANGE -1 FOR REAL CITY ID
-        new GetForecastTask().execute(-1);
+        new GetForecastTask(this).execute(city.getId());
     }
 
     public void onCitiesLoaded(boolean success, List<City> cities)
@@ -101,6 +102,11 @@ public class SearchCitiyActivity extends AppCompatActivity
         {
             loadModelCities(cities);
             loadViewCities();
+
+            if( cities.size() == 0 )
+            {
+                Toast.makeText(this, R.string.no_results, Toast.LENGTH_SHORT).show();
+            }
         } else
         {
             Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_SHORT).show();
@@ -129,7 +135,7 @@ public class SearchCitiyActivity extends AppCompatActivity
         });
     }
 
-    private void onRefreshedDateList(boolean hasConnectivity,
+    public void onForecastGotten(boolean hasConnectivity,
                                      boolean isDay,
                                      List<DayTemperature> dateList)
     {
@@ -141,6 +147,12 @@ public class SearchCitiyActivity extends AppCompatActivity
         {
             Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_LONG).show();
         }
+        onBackPressed();
+    }
+
+    @Override
+    public View getView() {
+        return findViewById(R.id.activity_select_city);
     }
 
     protected class GetCitiesTask extends AsyncTask<String, Void, ServiceResponse<ArrayList<City>>> {
@@ -158,35 +170,6 @@ public class SearchCitiyActivity extends AppCompatActivity
                 onCitiesLoaded(true, response.getServiceResponse());
             } else {
                 onCitiesLoaded(false, response.getServiceResponse());
-            }
-        }
-    }
-
-    protected class GetForecastTask extends AsyncTask<Integer, Void, ServiceResponse<Forecast>> {
-
-        private Snackbar snackbar;
-
-        public GetForecastTask (){
-            this.snackbar = Snackbar.make(findViewById(R.id.activity_select_city),
-                    "Cargando información...", Snackbar.LENGTH_INDEFINITE);
-        }
-
-        protected void onPreExecute() {
-            this.snackbar.show();
-        }
-
-        protected ServiceResponse<Forecast> doInBackground(Integer... params) {
-            return new WeatherService().getForecast(params[0]);
-        }
-
-        protected void onPostExecute(ServiceResponse<Forecast> response) {
-            this.snackbar.dismiss();
-
-            if (response.getStatusCode() == ServiceResponse.ServiceStatusCode.SUCCESS) {
-                onRefreshedDateList(true, response.getServiceResponse().isDayInCity(),
-                        response.getServiceResponse().getDayTemperatureList());
-            } else {
-                onRefreshedDateList(false, false, null);
             }
         }
     }
