@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.tdp2.tp0.weweather.R;
 import com.tdp2.tp0.weweather.model.AppModel;
 import com.tdp2.tp0.weweather.model.City;
+import com.tdp2.tp0.weweather.model.DayTemperature;
+import com.tdp2.tp0.weweather.model.Demos;
+import com.tdp2.tp0.weweather.persistance.Persistance;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +27,7 @@ public class SearchCitiyActivity extends AppCompatActivity
     private ArrayAdapter<String> cityAdapter;
     private List<City> cityList;
     private List<String> viewList;
+    private Persistance persistance = new Persistance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -69,36 +73,66 @@ public class SearchCitiyActivity extends AppCompatActivity
             {
                 if( position <= cityList.size() )
                 {
-                    //TODO GET CountryCode and CityName
-                    City selected = cityList.get(position);
-                    //AppModel.getInstance().setCity(cc, selected);
-                    //TODO set city selected, load temperatures.. and go back..
+                    onCitySelected(cityList.get(position));
                 }
             }
         });
     }
 
+    public void onCitySelected(City city)
+    {
+        AppModel.getInstance().setCity(city);
+        persistance.saveFrom(this, AppModel.getInstance());
+        //TODO DO CORRECT CALL
+    }
+
     public void onCitiesLoaded(boolean success, List<City> cities)
     {
+        AppModel.getInstance().setHasConnectivity(success);
         if( success )
         {
-            cityList.clear();
-            cityList.addAll(cities);
-            Collections.sort(cityList, new Comparator<City>() {
-                @Override
-                public int compare(City o1, City o2) {
-                    return o1.getCountry().compareTo(o2.getCountry());
-                }
-            });
-            viewList.clear();
-            for( City city : cityList )
-            {
-                viewList.add(city.getName());
-            }
-            cityAdapter.notifyDataSetChanged();
+            loadModelCities(cities);
+            loadViewCities();
         } else
         {
             Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void loadViewCities()
+    {
+        viewList.clear();
+        for( City city : cityList )
+        {
+            viewList.add(city.getName());
+        }
+        cityAdapter.notifyDataSetChanged();
+    }
+
+    private void loadModelCities(List<City> cities)
+    {
+        cityList.clear();
+        cityList.addAll(cities);
+        cityList.addAll(Demos.getDemoCities(searchView.getQuery().toString()));
+        Collections.sort(cityList, new Comparator<City>() {
+            @Override
+            public int compare(City o1, City o2) {
+                return o1.getCountry().compareTo(o2.getCountry());
+            }
+        });
+    }
+
+    private void onRefreshedDateList(boolean hasConnectivity,
+                                     boolean isDay,
+                                     List<DayTemperature> dateList)
+    {
+        AppModel.getInstance().setHasConnectivity(hasConnectivity);
+        if( hasConnectivity )
+        {
+            AppModel.getInstance().setCityData(dateList, isDay);
+        } else
+        {
+            Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_LONG).show();
         }
     }
 }

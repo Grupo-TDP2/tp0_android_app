@@ -9,9 +9,4 @@ public class Paris2Demo extends Demo
     {
         super(new City(-2, "Paris2", "AR"));
     }
-
-    @Override
-    public void getNewData() {
-
-    }
 }

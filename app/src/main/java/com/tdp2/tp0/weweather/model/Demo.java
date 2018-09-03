@@ -9,9 +9,6 @@ public abstract class Demo
         this.city = city;
     }
 
-    //TODO
-    public abstract void getNewData();
-
     public boolean hasCity(City city)
     {
         return this.city.getId() == city.getId();

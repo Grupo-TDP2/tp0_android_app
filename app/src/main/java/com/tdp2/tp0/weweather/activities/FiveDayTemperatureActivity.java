@@ -143,8 +143,10 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
                                      boolean isDay,
                                      List<DayTemperature> dateList)
     {
+        AppModel.getInstance().setHasConnectivity(hasConnectivity);
         if( hasConnectivity )
         {
+            AppModel.getInstance().setCityData(dateList, isDay);
             if( isDay && displayState != DisplayState.DAY_MODE ||
                 !isDay && displayState != DisplayState.NIGHT_MODE )
             {
