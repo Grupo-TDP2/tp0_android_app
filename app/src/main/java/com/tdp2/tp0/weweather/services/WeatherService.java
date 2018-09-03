@@ -12,11 +12,17 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class WeatherService {
 
     private String API_URI = "https://fiuba-tdp2-tp0.herokuapp.com";
+    private Integer utcTimeZoneDifference = -3;
 
     public ServiceResponse<Forecast> getForecast(Integer cityID) {
         HttpURLConnection client = null;
@@ -52,6 +58,13 @@ public class WeatherService {
             JSONObject jsonObject = new JSONObject(result);
 
             Boolean isDayInCity = jsonObject.getBoolean("isDayInCity");
+
+            if (cityID != -1 && cityID != -2) {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("America/Argentina/Buenos_Aires"));
+                Integer hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+                isDayInCity = (hourOfDay >= 6 && hourOfDay <= 20);
+            }
+
             ArrayList<DayTemperature> dayTemperatures = new ArrayList<DayTemperature>();
 
             for (int i = 1; i <= 5; i++) {
@@ -60,11 +73,29 @@ public class WeatherService {
                 JSONObject midday = itemObject.getJSONObject("midday");
                 JSONObject midnight = itemObject.getJSONObject("midnight");
 
+                String middayTemp, middayWeather, midnightTemp, midnightWeather;
+
+                if (midday.getString("temperature") == "null") {
+                    middayTemp = "-";
+                    middayWeather = "";
+                } else {
+                    middayTemp = midday.getString("temperature");
+                    middayWeather = midday.getString("weather");
+                }
+
+                if (midnight.getString("temperature") == "null") {
+                    midnightTemp = "-";
+                    midnightWeather = "";
+                } else {
+                    midnightTemp = midnight.getString("temperature");
+                    midnightWeather = midnight.getString("weather");
+                }
+
                 DayTemperature dayTemperature = new DayTemperature(DateTransform.transfrom(i),
-                        midday.getInt("temperature"),
-                        midnight.getInt("temperature"),
-                        WeatherTransfrom.transform(midday.getInt("weather")),
-                        WeatherTransfrom.transform(midnight.getInt("weather")));
+                        middayTemp,
+                        midnightTemp,
+                        WeatherTransfrom.transform(middayWeather),
+                        WeatherTransfrom.transform(midnightWeather));
 
                 dayTemperatures.add(dayTemperature);
             }

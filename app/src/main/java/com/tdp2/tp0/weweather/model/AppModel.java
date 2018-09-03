@@ -29,7 +29,7 @@ public class AppModel
         for( int i = 0; i < 5; i++)
         {
            temperatures.add(new DayTemperature(date,
-                   25,25,
+                   "25","25",
                    ClimateState.CLEAR, ClimateState.CLEAR ));
            Calendar c = Calendar.getInstance();
            c.setTime(date);

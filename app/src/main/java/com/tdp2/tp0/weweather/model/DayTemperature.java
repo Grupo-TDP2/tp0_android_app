@@ -5,14 +5,14 @@ import java.util.Date;
 public class DayTemperature
 {
     private Date date;
-    private int dayTemperature;
-    private int nightTemperature;
+    private String dayTemperature;
+    private String nightTemperature;
     private ClimateState dayIcon;
     private ClimateState nightIcon;
 
     public DayTemperature(
             Date date,
-            int dayTemperature, int nightTemperature,
+            String dayTemperature, String nightTemperature,
             ClimateState dayIcon, ClimateState nightIcon) {
         this.date = date;
         this.dayTemperature = dayTemperature;
@@ -25,11 +25,11 @@ public class DayTemperature
         return date;
     }
 
-    public int getDayTemperature() {
+    public String getDayTemperature() {
         return dayTemperature;
     }
 
-    public int getNightTemperature() {
+    public String getNightTemperature() {
         return nightTemperature;
     }
 

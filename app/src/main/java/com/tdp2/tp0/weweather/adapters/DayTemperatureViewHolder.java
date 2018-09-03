@@ -34,7 +34,7 @@ class DayTemperatureViewHolder
         nightTemperature = view.findViewById(R.id.night_temperature);
     }
 
-    public void setDayTemperatue(int temperatue)
+    public void setDayTemperatue(String temperatue)
     {
         setTemperature(temperatue, dayTemperatue);
     }
@@ -44,7 +44,7 @@ class DayTemperatureViewHolder
         setDrawable(context, state, dayIcon, true);
     }
 
-    public void setNightTemperature(int temperatue)
+    public void setNightTemperature(String temperatue)
     {
         setTemperature(temperatue, nightTemperature);
     }
@@ -150,7 +150,7 @@ class DayTemperatureViewHolder
         return 0;
     }
 
-    private void setTemperature(int value, TextView view)
+    private void setTemperature(String value, TextView view)
     {
         view.setText(String.valueOf(value));
     }
