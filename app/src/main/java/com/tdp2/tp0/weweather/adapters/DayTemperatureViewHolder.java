@@ -89,6 +89,7 @@ class DayTemperatureViewHolder
 
     private int getIcon(ClimateState state, boolean isDay)
     {
+        boolean dayMode = AppModel.getInstance().isDayInCity();
         switch (state)
         {
             case MIST:
@@ -100,6 +101,10 @@ class DayTemperatureViewHolder
                     return R.drawable.ic_mist_white;
                 }
             case SNOW:
+                if( dayMode )
+                {
+                    return R.drawable.ic_snow_day_mode;
+                }
                 return R.drawable.ic_snow;
             case STORM:
                 return R.drawable.ic_storm;
@@ -112,7 +117,15 @@ class DayTemperatureViewHolder
             case RAINY:
                 if( isDay )
                 {
+                    if( dayMode )
+                    {
+                        return R.drawable.ic_rainy_day_day_mode;
+                    }
                     return R.drawable.ic_rainy_day;
+                }
+                if( dayMode )
+                {
+                    return R.drawable.ic_rainy_night_day_mode;
                 }
                 return R.drawable.ic_rainy_night;
             case CLOUDY:
@@ -124,6 +137,10 @@ class DayTemperatureViewHolder
             case CLOUDY_LOW:
                 return R.drawable.ic_cloudy_low;
             case HEAVY_RAIN:
+                if( dayMode )
+                {
+                    return R.drawable.ic_heavy_rain_day_mode;
+                }
                 return R.drawable.ic_heavy_rain;
             case CLOUDY_HIGH:
                 return R.drawable.ic_cloudy_high;
