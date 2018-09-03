@@ -1,4 +1,4 @@
-package com.tdp2.tp0.weweather.model.responses;
+package com.tdp2.tp0.weweather.utils;
 
 import com.tdp2.tp0.weweather.model.ClimateState;
 

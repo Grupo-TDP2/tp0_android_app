@@ -1,13 +1,11 @@
 package com.tdp2.tp0.weweather.services;
 
-import com.tdp2.tp0.weweather.model.City;
 import com.tdp2.tp0.weweather.model.DayTemperature;
 import com.tdp2.tp0.weweather.model.Forecast;
 import com.tdp2.tp0.weweather.model.responses.ServiceResponse;
-import com.tdp2.tp0.weweather.model.responses.WeatherTransfrom;
+import com.tdp2.tp0.weweather.utils.WeatherTransfrom;
 import com.tdp2.tp0.weweather.utils.DateTransform;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;

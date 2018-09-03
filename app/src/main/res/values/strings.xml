@@ -7,4 +7,6 @@
     <string name="not_enough_letters">Se necesitan al menos 3 caraceters</string>
     <string name="no_connectivity_refresh">No fue posible conectarse al servidor, por favor intente más tarde</string>
     <string name="city_name">%1$s, %2$s</string>
+    <string name="loading_temperatures">Cargando información...</string>
+    <string name="no_results">No hubo resultados</string>
 </resources>
