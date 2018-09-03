@@ -2,12 +2,9 @@ package com.tdp2.tp0.weweather.model;
 
 public enum ClimateState
 {
-    CLEAR_DAY,
-    CLEAR_NIGHT,
-    CLOUDY_DAY,
-    CLOUDY_NIGHT,
-    RAINY_DAY,
-    RAINY_NIGHT,
+    CLEAR,
+    CLOUDY,
+    RAINY,
     MIST,
     HEAVY_RAIN,
     STORM,

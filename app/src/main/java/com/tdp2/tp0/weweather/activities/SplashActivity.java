@@ -23,8 +23,7 @@ public class SplashActivity extends AppCompatActivity
         persistance.loadInto(this, model);
         if( !AppModel.getInstance().hasCity() )
         {
-            //TODO check name
-            AppModel.getInstance().setCity("AR", "Buenos Aires");
+            AppModel.getInstance().setCity(AppModel.DEFAULT_CITY);
         }
         //TODO search city
         //TODO remove

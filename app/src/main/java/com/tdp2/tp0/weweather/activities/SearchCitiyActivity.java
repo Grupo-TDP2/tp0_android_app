@@ -10,16 +10,19 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.tdp2.tp0.weweather.R;
-import com.tdp2.tp0.weweather.model.AppModel;
+import com.tdp2.tp0.weweather.model.City;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SearchCitiyActivity extends AppCompatActivity
 {
     private SearchView searchView;
     private ArrayAdapter<String> cityAdapter;
-    private List<String> cityList;
+    private List<City> cityList;
+    private List<String> viewList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,9 +55,10 @@ public class SearchCitiyActivity extends AppCompatActivity
         });
 
         cityList = new ArrayList<>();
+        viewList = new ArrayList<>();
         cityAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1
-                ,cityList);
+                , viewList);
         ListView listView = findViewById(R.id.cities_list);
         listView.setAdapter(cityAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -65,8 +69,7 @@ public class SearchCitiyActivity extends AppCompatActivity
                 if( position <= cityList.size() )
                 {
                     //TODO GET CountryCode and CityName
-                    String selected = cityList.get(position);
-                    String cc = cityList.get(position);
+                    City selected = cityList.get(position);
                     //AppModel.getInstance().setCity(cc, selected);
                     //TODO set city selected, load temperatures.. and go back..
                 }
@@ -74,13 +77,23 @@ public class SearchCitiyActivity extends AppCompatActivity
         });
     }
 
-
-    public void onCitiesLoaded(boolean success, List<String> cities)
+    public void onCitiesLoaded(boolean success, List<City> cities)
     {
         if( success )
         {
             cityList.clear();
             cityList.addAll(cities);
+            Collections.sort(cityList, new Comparator<City>() {
+                @Override
+                public int compare(City o1, City o2) {
+                    return o1.getCountry().compareTo(o2.getCountry());
+                }
+            });
+            viewList.clear();
+            for( City city : cityList )
+            {
+                viewList.add(city.getCountry());
+            }
             cityAdapter.notifyDataSetChanged();
         } else
         {

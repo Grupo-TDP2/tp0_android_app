@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.tdp2.tp0.weweather.R;
 import com.tdp2.tp0.weweather.adapters.DayListAdapter;
 import com.tdp2.tp0.weweather.model.AppModel;
+import com.tdp2.tp0.weweather.model.City;
 import com.tdp2.tp0.weweather.model.DayTemperature;
 
 import java.util.List;
@@ -22,34 +23,34 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
 {
     enum DisplayState
     {
-        NO_CONNECTIVITY(R.style.AppTheme_NoActionBar_NoConnectivity),
-        NIGHT_MODE(R.style.AppTheme_NoActionBar_NightMode),
-        DAY_MODE(R.style.AppTheme_NoActionBar_DayMode);
+        NO_CONNECTIVITY(R.style.AppTheme_NoActionBar_NoConnectivity, false),
+        NIGHT_MODE(R.style.AppTheme_NoActionBar_NightMode, true),
+        DAY_MODE(R.style.AppTheme_NoActionBar_DayMode, true);
         int theme;
-        DisplayState(int theme)
+        boolean displayTemperature;
+        DisplayState(int theme, boolean displayTemperature)
         {
             this.theme = theme;
+            this.displayTemperature = displayTemperature;
         }
     }
 
     private static DisplayState displayState = DisplayState.NO_CONNECTIVITY;
-    private static boolean temperatureVisible = false;
     private DayListAdapter adapter;
     private List<DayTemperature> temperatures;
+    private City lastCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        determineStartingTheme();
+        displayState = determineActualStartingTheme();
         setTheme(displayState.theme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pantalla_de_inicio);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        String cityName = AppModel.getInstance().getCitySelected();
-        String countryCode = AppModel.getInstance().getCountryCode();
-        getSupportActionBar().setTitle(getString(R.string.city_name, cityName, countryCode));
+        setCityName();
 
         FloatingActionButton actionButton = findViewById(R.id.fab);
         actionButton.setOnClickListener(new View.OnClickListener() {
@@ -63,8 +64,26 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
 
         ListView listView = findViewById(R.id.temperature_list_view);
         adapter = new DayListAdapter(this, R.layout.temperature_list_item, getDateList());
-        adapter.changeDisplayTemperature(temperatureVisible);
+        adapter.changeDisplayTemperature(displayState.displayTemperature);
         listView.setAdapter(adapter);
+
+        lastCity = AppModel.getInstance().getCitySelected();
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        DisplayState newState = determineActualStartingTheme();
+        if( newState != displayState )
+        {
+            displayState = newState;
+            restartActivity();
+            return;
+        } else if( lastCity.getId() != AppModel.getInstance().getCitySelected().getId() )
+        {
+            setCityName();
+        }
 
         if( displayState == DisplayState.NO_CONNECTIVITY )
         {
@@ -72,18 +91,24 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
         }
     }
 
-    private void determineStartingTheme()
+    private void setCityName()
+    {
+        City city = AppModel.getInstance().getCitySelected();
+        getSupportActionBar().setTitle(getString(R.string.city_name, city.getName(), city.getCountry()));
+    }
+
+    private DisplayState determineActualStartingTheme()
     {
         AppModel model = AppModel.getInstance();
         if( !model.hasConnectivity() )
         {
-            setNoConnectivityMode();
+            return DisplayState.NO_CONNECTIVITY;
         } else if( model.isDayInCity() )
         {
-            setDayMode();
+            return DisplayState.DAY_MODE;
         } else
         {
-            setNightMode();
+            return DisplayState.NIGHT_MODE;
         }
     }
 
@@ -105,27 +130,6 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void setNightMode()
-    {
-        changeDisplayMode(DisplayState.NIGHT_MODE, true);
-    }
-
-    public void setDayMode()
-    {
-        changeDisplayMode(DisplayState.DAY_MODE, true);
-    }
-
-    public void setNoConnectivityMode()
-    {
-       changeDisplayMode(DisplayState.NO_CONNECTIVITY, false);
-    }
-
-    private void changeDisplayMode(DisplayState state, boolean displayTemperatures)
-    {
-        displayState = state;
-        temperatureVisible = displayTemperatures;
     }
 
     private List<DayTemperature> getDateList()
@@ -153,7 +157,7 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
             }
         } else
         {
-            Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_LONG).show();
         }
     }
 

@@ -8,7 +8,7 @@ import java.util.List;
 public class AppModel
 {
     private static AppModel instance;
-
+    public static final City DEFAULT_CITY = new City(3435910, "Buenos Aires", "AR");
     public static AppModel getInstance()
     {
         if( instance == null )
@@ -19,8 +19,7 @@ public class AppModel
     }
 
     private boolean hasConnectivity = false;
-    private String citySelected = null;
-    private String countryCode = null;
+    private City city = null;
     private List<DayTemperature> temperatures = new ArrayList<>();
     private boolean isDayInCity = false;
 
@@ -29,7 +28,9 @@ public class AppModel
         Date date = new Date();
         for( int i = 0; i < 5; i++)
         {
-           temperatures.add(new DayTemperature(date, 25,25, ClimateState.CLEAR_DAY, ClimateState.CLEAR_NIGHT ));
+           temperatures.add(new DayTemperature(date,
+                   25,25,
+                   ClimateState.CLEAR, ClimateState.CLEAR ));
            Calendar c = Calendar.getInstance();
            c.setTime(date);
            c.add(Calendar.DATE, 1);
@@ -37,10 +38,9 @@ public class AppModel
        }
     }
 
-    public void setCity(String countryCode, String name)
+    public void setCity(City city)
     {
-        this.countryCode = countryCode;
-        this.citySelected = name;
+        this.city = city;
     }
 
     public void setCityData(List<DayTemperature> temperatures, boolean isDayInCity )
@@ -51,21 +51,17 @@ public class AppModel
 
     public boolean hasCity()
     {
-        return citySelected != null;
+        return city != null;
     }
 
-    public String getCitySelected()
+    public City getCitySelected()
     {
-        return citySelected;
+        return city;
     }
 
     public List<DayTemperature> getTemperatures()
     {
         return temperatures;
-    }
-
-    public String getCountryCode() {
-        return countryCode;
     }
 
     public boolean isDayInCity()

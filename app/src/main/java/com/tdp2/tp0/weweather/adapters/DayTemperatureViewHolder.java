@@ -40,7 +40,7 @@ class DayTemperatureViewHolder
 
     public void setDayIcon(Context context, ClimateState state)
     {
-        setDrawable(context, state, dayIcon);
+        setDrawable(context, state, dayIcon, true);
     }
 
     public void setNightTemperature(int temperatue)
@@ -50,7 +50,7 @@ class DayTemperatureViewHolder
 
     public void setNightIcon(Context context, ClimateState state)
     {
-       setDrawable(context, state, nightIcon);
+       setDrawable(context, state, nightIcon, false);
     }
 
     public void setDayName(int position, Date day)
@@ -80,13 +80,13 @@ class DayTemperatureViewHolder
         }
     }
 
-    private void setDrawable(Context context, ClimateState state, ImageView view)
+    private void setDrawable(Context context, ClimateState state, ImageView view, boolean isDay)
     {
-        Drawable drawable = VectorDrawableCompat.create(context.getResources(), getIcon(state), null );
+        Drawable drawable = VectorDrawableCompat.create(context.getResources(), getIcon(state, isDay), null );
         view.setImageDrawable(drawable);
     }
 
-    private int getIcon(ClimateState state)
+    private int getIcon(ClimateState state, boolean isDay)
     {
         switch (state)
         {
@@ -96,24 +96,30 @@ class DayTemperatureViewHolder
                 return R.drawable.ic_snow;
             case STORM:
                 return R.drawable.ic_storm;
-            case CLEAR_DAY:
-                return R.drawable.ic_clear_day;
-            case RAINY_DAY:
-                return R.drawable.ic_rainy_day;
-            case CLOUDY_DAY:
-                return R.drawable.ic_cloudy_day;
+            case CLEAR:
+                if( isDay )
+                {
+                    return R.drawable.ic_clear_day;
+                }
+                return R.drawable.ic_clear_night;
+            case RAINY:
+                if( isDay )
+                {
+                    return R.drawable.ic_rainy_day;
+                }
+                return R.drawable.ic_rainy_night;
+            case CLOUDY:
+                if( isDay )
+                {
+                    return R.drawable.ic_cloudy_day;
+                }
+                return R.drawable.ic_cloudy_night;
             case CLOUDY_LOW:
                 return R.drawable.ic_cloudy_low;
             case HEAVY_RAIN:
                 return R.drawable.ic_heavy_rain;
             case CLOUDY_HIGH:
                 return R.drawable.ic_cloudy_high;
-            case RAINY_NIGHT:
-                return R.drawable.ic_rainy_night;
-            case CLOUDY_NIGHT:
-                return R.drawable.ic_cloudy_night;
-            case CLEAR_NIGHT:
-                return R.drawable.ic_clear_night;
             case CLOUDY_MEDIUM:
                 return R.drawable.ic_cloudy_medium;
         }
