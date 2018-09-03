@@ -1,5 +1,8 @@
 package com.tdp2.tp0.weweather.model;
 
+import com.tdp2.tp0.weweather.model.demos.Paris1Demo;
+import com.tdp2.tp0.weweather.model.demos.Paris2Demo;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +25,7 @@ public class AppModel
     private City city = null;
     private List<DayTemperature> temperatures = new ArrayList<>();
     private boolean isDayInCity = false;
+    private List<Demo> demos = new ArrayList<>();
 
     private AppModel()
     {
@@ -35,7 +39,9 @@ public class AppModel
            c.setTime(date);
            c.add(Calendar.DATE, 1);
            date = c.getTime();
-       }
+        }
+        demos.add(new Paris1Demo());
+        demos.add(new Paris2Demo());
     }
 
     public void setCity(City city)
@@ -69,13 +75,44 @@ public class AppModel
         return isDayInCity;
     }
 
-    public boolean hasConnectivity() {
+    public boolean hasConnectivity()
+    {
         return hasConnectivity;
     }
 
-    public void setHasConnectivity(boolean hasConnectivity) {
+    public void setHasConnectivity(boolean hasConnectivity)
+    {
         this.hasConnectivity = hasConnectivity;
     }
 
+    public boolean isDemo(City city)
+    {
+        for( Demo demo : demos )
+        {
+            if(demo.hasCity(city))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<City> getDemoCities(String condition)
+    {
+        List<City> filtered = new ArrayList<>();
+        for( Demo demo : demos )
+        {
+            if(demo.canBeFound(condition))
+            {
+                filtered.add(demo.getCity());
+            }
+        }
+        return filtered;
+    }
+
+    public void getNewData(City demo)
+    {
+        //TODO DETERMINE HOW TO OBTAIN
+    }
 
 }
