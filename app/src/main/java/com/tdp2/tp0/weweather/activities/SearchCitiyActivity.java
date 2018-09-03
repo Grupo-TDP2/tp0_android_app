@@ -1,7 +1,9 @@
 package com.tdp2.tp0.weweather.activities;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,10 +17,12 @@ import com.tdp2.tp0.weweather.model.AppModel;
 import com.tdp2.tp0.weweather.model.City;
 
 import com.tdp2.tp0.weweather.model.DayTemperature;
+import com.tdp2.tp0.weweather.model.Forecast;
 import com.tdp2.tp0.weweather.persistance.Persistance;
 
 import com.tdp2.tp0.weweather.model.responses.ServiceResponse;
 import com.tdp2.tp0.weweather.services.CitySearchService;
+import com.tdp2.tp0.weweather.services.WeatherService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,7 +90,8 @@ public class SearchCitiyActivity extends AppCompatActivity
     {
         AppModel.getInstance().setCity(city);
         persistance.saveFrom(this, AppModel.getInstance());
-        //TODO DO CORRECT CALL
+        //TODO DO CORRECT CALL - CHANGE -1 FOR REAL CITY ID
+        new GetForecastTask().execute(-1);
     }
 
     public void onCitiesLoaded(boolean success, List<City> cities)
@@ -153,6 +158,35 @@ public class SearchCitiyActivity extends AppCompatActivity
                 onCitiesLoaded(true, response.getServiceResponse());
             } else {
                 onCitiesLoaded(false, response.getServiceResponse());
+            }
+        }
+    }
+
+    protected class GetForecastTask extends AsyncTask<Integer, Void, ServiceResponse<Forecast>> {
+
+        private Snackbar snackbar;
+
+        public GetForecastTask (){
+            this.snackbar = Snackbar.make(findViewById(R.id.activity_select_city),
+                    "Cargando información...", Snackbar.LENGTH_INDEFINITE);
+        }
+
+        protected void onPreExecute() {
+            this.snackbar.show();
+        }
+
+        protected ServiceResponse<Forecast> doInBackground(Integer... params) {
+            return new WeatherService().getForecast(params[0]);
+        }
+
+        protected void onPostExecute(ServiceResponse<Forecast> response) {
+            this.snackbar.dismiss();
+
+            if (response.getStatusCode() == ServiceResponse.ServiceStatusCode.SUCCESS) {
+                onRefreshedDateList(true, response.getServiceResponse().isDayInCity(),
+                        response.getServiceResponse().getDayTemperatureList());
+            } else {
+                onRefreshedDateList(false, false, null);
             }
         }
     }
