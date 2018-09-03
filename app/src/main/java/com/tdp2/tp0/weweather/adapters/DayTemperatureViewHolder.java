@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.tdp2.tp0.weweather.model.AppModel;
 import com.tdp2.tp0.weweather.model.ClimateState;
 import com.tdp2.tp0.weweather.R;
 import com.tdp2.tp0.weweather.utils.StringUtils;
@@ -91,7 +92,13 @@ class DayTemperatureViewHolder
         switch (state)
         {
             case MIST:
-                return R.drawable.ic_mist;
+                if( AppModel.getInstance().isDayInCity() )
+                {
+                    return R.drawable.ic_mist;
+                } else
+                {
+                    return R.drawable.ic_mist_white;
+                }
             case SNOW:
                 return R.drawable.ic_snow;
             case STORM:
