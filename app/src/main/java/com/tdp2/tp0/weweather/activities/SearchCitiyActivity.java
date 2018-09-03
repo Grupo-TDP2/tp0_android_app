@@ -10,6 +10,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.tdp2.tp0.weweather.R;
+import com.tdp2.tp0.weweather.model.AppModel;
 import com.tdp2.tp0.weweather.model.City;
 
 import java.util.ArrayList;
@@ -92,7 +93,7 @@ public class SearchCitiyActivity extends AppCompatActivity
             viewList.clear();
             for( City city : cityList )
             {
-                viewList.add(city.getCountry());
+                viewList.add(city.getName());
             }
             cityAdapter.notifyDataSetChanged();
         } else
