@@ -1,5 +1,6 @@
 package com.tdp2.tp0.weweather.activities;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,9 +13,12 @@ import android.widget.Toast;
 import com.tdp2.tp0.weweather.R;
 import com.tdp2.tp0.weweather.model.AppModel;
 import com.tdp2.tp0.weweather.model.City;
+
 import com.tdp2.tp0.weweather.model.DayTemperature;
-import com.tdp2.tp0.weweather.model.Demos;
 import com.tdp2.tp0.weweather.persistance.Persistance;
+
+import com.tdp2.tp0.weweather.model.responses.ServiceResponse;
+import com.tdp2.tp0.weweather.services.CitySearchService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,8 +46,7 @@ public class SearchCitiyActivity extends AppCompatActivity
             {
                 if( query.length() >= 3 )
                 {
-                    //TODO make request for cities
-                    //onCitiesLoaded();
+                    new GetCitiesTask().execute(query);
                     searchView.clearFocus();
                     return true;
                 }
@@ -113,7 +116,6 @@ public class SearchCitiyActivity extends AppCompatActivity
     {
         cityList.clear();
         cityList.addAll(cities);
-        cityList.addAll(Demos.getDemoCities(searchView.getQuery().toString()));
         Collections.sort(cityList, new Comparator<City>() {
             @Override
             public int compare(City o1, City o2) {
@@ -133,6 +135,25 @@ public class SearchCitiyActivity extends AppCompatActivity
         } else
         {
             Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    protected class GetCitiesTask extends AsyncTask<String, Void, ServiceResponse<ArrayList<City>>> {
+
+        protected void onPreExecute() {
+
+        }
+
+        protected ServiceResponse<ArrayList<City>> doInBackground(String... params) {
+            return new CitySearchService().getCities(params[0]);
+        }
+
+        protected void onPostExecute(ServiceResponse<ArrayList<City>> response) {
+            if (response.getStatusCode() == ServiceResponse.ServiceStatusCode.SUCCESS) {
+                onCitiesLoaded(true, response.getServiceResponse());
+            } else {
+                onCitiesLoaded(false, response.getServiceResponse());
+            }
         }
     }
 }
