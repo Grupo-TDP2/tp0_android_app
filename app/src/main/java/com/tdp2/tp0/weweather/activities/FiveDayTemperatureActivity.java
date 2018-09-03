@@ -38,6 +38,7 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
     }
 
     private static DisplayState displayState = DisplayState.NO_CONNECTIVITY;
+    private static boolean firstTime = true;
     private DayListAdapter adapter;
     private List<DayTemperature> temperatures;
     private City lastCity;
@@ -87,10 +88,11 @@ public class FiveDayTemperatureActivity extends AppCompatActivity
             setTemperature(AppModel.getInstance().getTemperatures());
         }
 
-        if( displayState == DisplayState.NO_CONNECTIVITY )
+        if( firstTime && displayState == DisplayState.NO_CONNECTIVITY )
         {
             Toast.makeText(this, R.string.no_connectivity_refresh, Toast.LENGTH_SHORT).show();
         }
+        firstTime = false;
     }
 
     private void setCityName()
